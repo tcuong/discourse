@@ -1,5 +1,6 @@
 require_dependency 'distributed_cache'
 require_dependency 'stylesheet/compiler'
+require_dependency 'stylesheet/manager'
 
 class Theme < ActiveRecord::Base
 
@@ -40,7 +41,7 @@ class Theme < ActiveRecord::Base
   @cache = DistributedCache.new('theme')
 
   def self.css_fields
-    %w(stylesheet mobile_stylesheet embedded_css)
+    %w(mobile_scss desktop_scss embedded_scss)
   end
 
   def self.html_fields
@@ -50,13 +51,6 @@ class Theme < ActiveRecord::Base
   before_create do
     self.key ||= SecureRandom.uuid
     true
-  end
-
-  def compile_stylesheet(scss)
-    return "" if scss.blank?
-
-    stylesheet, _ = Stylesheet::Compiler.compile("@import \"theme_variables\";\n" << scss, "theme_#{name.parameterize}.scss")
-    stylesheet
   end
 
   def transpile(es6_source, version)
@@ -120,16 +114,6 @@ COMPILED
         self.send("#{html_attr}_baked=", process_html(resolve_attr(html_attr)))
       end
     end
-
-    Theme.css_fields.each do |stylesheet_attr|
-      if force_rebake || self.send("#{stylesheet_attr}_changed?")
-        begin
-          self.send("#{stylesheet_attr}_baked=", compile_stylesheet(resolve_attr(stylesheet_attr)))
-        rescue SassC::SyntaxError => e
-          self.send("#{stylesheet_attr}_baked=", Stylesheet::Compiler.error_as_css(e, "custom stylesheet"))
-        end
-      end
-    end
   end
 
   def resolve_attr(attribute)
@@ -150,8 +134,9 @@ COMPILED
   after_save do
     remove_from_cache!
     if any_stylesheet_changed?
-      MessageBus.publish "/file-change/#{key}", SecureRandom.hex
-      MessageBus.publish "/file-change/#{Theme::ENABLED_KEY}", SecureRandom.hex
+      [:dektop_theme, :embedded_theme, :mobile_theme].each do |theme|
+        # Stylesheet::Manager.compile(theme, theme_id: self.id)
+      end
     end
     MessageBus.publish "/header-change/#{key}", header if header_changed?
     MessageBus.publish "/footer-change/#{key}", footer if footer_changed?
@@ -282,63 +267,42 @@ COMPILED
     remove_from_cache!
     Theme.clear_cache!
   end
-
-  def mobile_stylesheet_link_tag
-    stylesheet_link_tag(:mobile)
-  end
-
-  def stylesheet_link_tag(target=:desktop)
-    content = self.send(Theme.field_for_target(target))
-    Theme.stylesheet_link_tag(key, target, content)
-  end
-
-  def self.stylesheet_link_tag(key, target, content)
-    return "" unless content.present?
-
-    hash = Digest::MD5.hexdigest(content)
-    link_css_tag "/site_customizations/#{key}.css?target=#{target}&v=#{hash}"
-  end
-
-  def self.link_css_tag(href)
-    href = (GlobalSetting.cdn_url || "") + "#{GlobalSetting.relative_url_root}#{href}&__ws=#{Discourse.current_hostname}"
-    %Q{<link class="custom-css" rel="stylesheet" href="#{href}" type="text/css" media="all">}.html_safe
-  end
 end
 
 # == Schema Information
 #
-# Table name: site_customizations
+# Table name: themes
 #
-#  id                      :integer          not null, primary key
-#  name                    :string           not null
-#  stylesheet              :text
-#  header                  :text
-#  user_id                 :integer          not null
-#  enabled                 :boolean          not null
-#  key                     :string           not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  stylesheet_baked        :text             default(""), not null
-#  mobile_stylesheet       :text
-#  mobile_header           :text
-#  mobile_stylesheet_baked :text
-#  footer                  :text
-#  mobile_footer           :text
-#  head_tag                :text
-#  body_tag                :text
-#  top                     :text
-#  mobile_top              :text
-#  embedded_css            :text
-#  embedded_css_baked      :text
-#  head_tag_baked          :text
-#  body_tag_baked          :text
-#  header_baked            :text
-#  mobile_header_baked     :text
-#  footer_baked            :text
-#  mobile_footer_baked     :text
-#  compiler_version        :integer          default(0), not null
+#  id                  :integer          not null, primary key
+#  name                :string           not null
+#  desktop_scss        :text
+#  header              :text
+#  user_id             :integer          not null
+#  key                 :string           not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  mobile_scss         :text
+#  mobile_header       :text
+#  footer              :text
+#  mobile_footer       :text
+#  head_tag            :text
+#  body_tag            :text
+#  top                 :text
+#  mobile_top          :text
+#  embedded_scss       :text
+#  head_tag_baked      :text
+#  body_tag_baked      :text
+#  header_baked        :text
+#  mobile_header_baked :text
+#  footer_baked        :text
+#  mobile_footer_baked :text
+#  compiler_version    :integer          default(0), not null
+#  user_selectable     :boolean          default(FALSE), not null
+#  hidden              :boolean          default(FALSE), not null
+#  color_scheme_id     :integer
+#  common_scss         :text
 #
 # Indexes
 #
-#  index_site_customizations_on_key  (key)
+#  index_themes_on_key  (key)
 #

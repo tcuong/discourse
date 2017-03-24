@@ -1,7 +1,9 @@
 require_dependency 'distributed_cache'
 require_dependency 'stylesheet/compiler'
 
-class DiscourseStylesheets
+module Stylesheet; end
+
+class Stylesheet::Manager
 
   CACHE_PATH ||= 'tmp/stylesheet-cache'
   MANIFEST_DIR ||= "#{Rails.root}/tmp/cache/assets/#{Rails.env}"
@@ -24,7 +26,8 @@ class DiscourseStylesheets
       builder = self.new(target, theme_id)
       builder.compile unless File.exists?(builder.stylesheet_fullpath)
       builder.ensure_digestless_file
-      tag = %[<link href="#{Rails.env.production? ? builder.stylesheet_cdnpath : builder.stylesheet_relpath_no_digest}" media="#{media}" rel="stylesheet" />]
+      path = Rails.env.development? ? builder.stylesheet_relpath_no_digest : builder.stylesheet_cdnpath
+      tag = %[<link href="#{path}" media="#{media}" rel="stylesheet" />]
 
       cache[target] = tag
 
@@ -173,20 +176,45 @@ class DiscourseStylesheets
   # digest encodes the things that trigger a recompile
   def digest
     @digest ||= begin
-      theme = (cs = Theme.find(@theme_id).color_scheme) ? "#{cs.id}-#{cs.version}" : false
-      category_updated = Category.where("uploaded_background_id IS NOT NULL").last_updated_at
-
-      if theme || category_updated > 0
-        Digest::SHA1.hexdigest "#{RailsMultisite::ConnectionManagement.current_db}-#{theme}-#{DiscourseStylesheets.last_file_updated}-#{category_updated}"
+      if @target.to_s =~ /_theme$/
+        theme_digest
       else
-        digest_string = "defaults-#{DiscourseStylesheets.last_file_updated}"
-
-        if cdn_url = GlobalSetting.cdn_url
-          digest_string = "#{digest_string}-#{cdn_url}"
-        end
-
-        Digest::SHA1.hexdigest digest_string
+        color_scheme_digest
       end
+    end
+  end
+
+  def theme_digest
+    theme = Theme.find(@theme_id)
+    scss = ""
+
+    if [:mobile_theme, :desktop_theme].include?(@target)
+      scss = theme.resolve_attr(:common_scss)
+      scss += theme.resolve_attr(@target.to_s.sub("theme", "scss"))
+    elsif @target == :embedded_theme
+      scss = theme.resolve_attr(:embedded_scss)
+    else
+      raise "attempting to look up theme digest for invalid field"
+    end
+
+    Digest::SHA1.hexdigest scss.to_s
+  end
+
+  def color_scheme_digest
+
+    theme = (cs = Theme.find(@theme_id).color_scheme) ? "#{cs.id}-#{cs.version}" : false
+    category_updated = Category.where("uploaded_background_id IS NOT NULL").last_updated_at
+
+    if theme || category_updated > 0
+      Digest::SHA1.hexdigest "#{RailsMultisite::ConnectionManagement.current_db}-#{theme}-#{Stylesheet::Manager.last_file_updated}-#{category_updated}"
+    else
+      digest_string = "defaults-#{Stylesheet::Manager.last_file_updated}"
+
+      if cdn_url = GlobalSetting.cdn_url
+        digest_string = "#{digest_string}-#{cdn_url}"
+      end
+
+      Digest::SHA1.hexdigest digest_string
     end
   end
 end

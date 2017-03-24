@@ -39,6 +39,8 @@ end
 #  content    :text             not null
 #  created_at :datetime
 #  updated_at :datetime
+#  theme_id   :integer          default(-1), not null
+#  source_map :text
 #
 # Indexes
 #
