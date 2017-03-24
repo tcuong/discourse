@@ -23,6 +23,8 @@ class StylesheetsController < ApplicationController
 
     if Rails.env == "development"
       # TODO add theme
+      # calling this method ensures we have a cache for said target
+      # we hold of re-compilation till someone asks for asset
       Stylesheet::Manager.stylesheet_link_tag(target)
     end
 

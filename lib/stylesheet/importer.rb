@@ -50,13 +50,13 @@ module Stylesheet
     end
 
     register_import "embedded_theme" do
-      return unless @theme_id
+      next unless @theme_id
 
       theme_import("embedded_theme.scss", :embedded_scss)
     end
 
     register_import "mobile_theme" do
-      return unless @theme_id
+      next unless @theme_id
 
       [
         theme_import("common_theme.scss", :common_scss),
@@ -65,7 +65,7 @@ module Stylesheet
     end
 
     register_import "desktop_theme" do
-      return unless @theme_id
+      next unless @theme_id
 
       [
         theme_import("common_theme.scss", :common_scss),

@@ -113,34 +113,33 @@ class StaffActionLogger
     }))
   end
 
-  SITE_CUSTOMIZATION_LOGGED_ATTRS = [
-    'stylesheet', 'mobile_stylesheet',
+  THEME_LOGGED_ATTRS = [
+    'common_scss', 'mobile_scss', 'desktop_scss',
     'header', 'mobile_header',
     'top', 'mobile_top',
     'footer', 'mobile_footer',
     'head_tag',
     'body_tag',
     'position',
-    'enabled',
     'key'
   ]
 
-  def log_site_customization_change(old_record, site_customization_params, opts={})
-    raise Discourse::InvalidParameters.new(:site_customization_params) unless site_customization_params
+  def log_theme_change(old_record, theme_params, opts={})
+    raise Discourse::InvalidParameters.new(:theme_params) unless theme_params
     UserHistory.create( params(opts).merge({
-      action: UserHistory.actions[:change_site_customization],
-      subject: site_customization_params[:name],
-      previous_value: old_record ? old_record.attributes.slice(*SITE_CUSTOMIZATION_LOGGED_ATTRS).to_json : nil,
-      new_value: site_customization_params.slice(*(SITE_CUSTOMIZATION_LOGGED_ATTRS.map(&:to_sym))).to_json
+      action: UserHistory.actions[:change_theme],
+      subject: theme_params[:name],
+      previous_value: old_record ? old_record.attributes.slice(*THEME_LOGGED_ATTRS).to_json : nil,
+      new_value: theme_params.slice(*(THEME_LOGGED_ATTRS.map(&:to_sym))).to_json
     }))
   end
 
-  def log_site_customization_destroy(site_customization, opts={})
-    raise Discourse::InvalidParameters.new(:site_customization) unless site_customization
+  def log_theme_destroy(theme, opts={})
+    raise Discourse::InvalidParameters.new(:theme) unless theme
     UserHistory.create( params(opts).merge({
-      action: UserHistory.actions[:delete_site_customization],
-      subject: site_customization.name,
-      previous_value: site_customization.attributes.slice(*SITE_CUSTOMIZATION_LOGGED_ATTRS).to_json
+      action: UserHistory.actions[:delete_theme],
+      subject: theme.name,
+      previous_value: theme.attributes.slice(*THEME_LOGGED_ATTRS).to_json
     }))
   end
 

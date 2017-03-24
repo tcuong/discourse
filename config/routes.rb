@@ -56,8 +56,6 @@ Discourse::Application.routes.draw do
   get "site/basic-info" => 'site#basic_info'
   get "site/statistics" => 'site#statistics'
 
-  get "site_customizations/:key" => "site_customizations#show"
-
   get "srv/status" => "forums#status"
 
   get "wizard" => "wizard#index"
@@ -173,8 +171,8 @@ Discourse::Application.routes.draw do
     get "/logs" => "staff_action_logs#index"
 
     get "customize" => "color_schemes#index", constraints: AdminConstraint.new
-    get "customize/css_html" => "site_customizations#index", constraints: AdminConstraint.new
-    get "customize/css_html/:id/:section" => "site_customizations#index", constraints: AdminConstraint.new
+    get "customize/css_html" => "theme#index", constraints: AdminConstraint.new
+    get "customize/css_html/:id/:section" => "theme#index", constraints: AdminConstraint.new
     get "customize/colors" => "color_schemes#index", constraints: AdminConstraint.new
     get "customize/permalinks" => "permalinks#index", constraints: AdminConstraint.new
     get "customize/embedding" => "embedding#show", constraints: AdminConstraint.new
@@ -185,7 +183,7 @@ Discourse::Application.routes.draw do
     post "flags/agree/:id" => "flags#agree"
     post "flags/disagree/:id" => "flags#disagree"
     post "flags/defer/:id" => "flags#defer"
-    resources :site_customizations, constraints: AdminConstraint.new
+    resources :themes, constraints: AdminConstraint.new
 
     scope "/customize", constraints: AdminConstraint.new do
       resources :user_fields, constraints: AdminConstraint.new

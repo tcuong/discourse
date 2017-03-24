@@ -20,17 +20,19 @@ class Stylesheet::Manager
     cache.hash.keys.select{|k| k =~ /theme/}.each{|k|cache.delete(k)}
   end
 
-  def self.stylesheet_link_tag(target = :desktop, media = 'all', theme_id = nil)
+  def self.stylesheet_link_tag(target = :desktop, media = 'all', theme_key = :missing)
 
-    theme_id ||= SiteSetting.default_theme_id
+    if theme_key == :missing
+      theme_key = SiteSetting.default_theme_key
+    end
 
-    cache_key = "#{target}_#{theme_id}"
+    cache_key = "#{target}_#{theme_key}"
     tag = cache[cache_key]
 
     return tag.dup.html_safe if tag
 
     @lock.synchronize do
-      builder = self.new(target, theme_id)
+      builder = self.new(target, theme_key)
       builder.compile unless File.exists?(builder.stylesheet_fullpath)
       builder.ensure_digestless_file
       path = Rails.env.development? ? builder.stylesheet_relpath_no_digest : builder.stylesheet_cdnpath
@@ -80,9 +82,9 @@ class Stylesheet::Manager
     end.compact.max.to_i
   end
 
-  def initialize(target = :desktop, theme_id)
+  def initialize(target = :desktop, theme_key)
     @target = target
-    @theme_id = theme_id
+    @theme_key = theme_key
   end
 
   def compile(opts={})
@@ -102,7 +104,7 @@ class Stylesheet::Manager
 
     rtl = @target.to_s =~ /_rtl$/
     css,source_map = begin
-      Stylesheet::Compiler.compile_asset(@target, rtl: rtl, theme_id: @theme_id)
+      Stylesheet::Compiler.compile_asset(@target, rtl: rtl, theme_id: theme&.id)
     rescue SassC::SyntaxError => e
       Rails.logger.error "Failed to compile #{@target} stylesheet: #{e.message}"
       [Stylesheet::Compiler.error_as_css(e, "#{@target} stylesheet"), nil]
@@ -190,8 +192,12 @@ class Stylesheet::Manager
     end
   end
 
+  def theme
+    @theme ||= (Theme.find_by(key: @theme_key) || :nil)
+    @theme == :nil ? nil : @theme
+  end
+
   def theme_digest
-    theme = Theme.find(@theme_id)
     scss = ""
 
     if [:mobile_theme, :desktop_theme].include?(@target)
@@ -208,11 +214,11 @@ class Stylesheet::Manager
 
   def color_scheme_digest
 
-    theme = (cs = @theme_id && Theme.find(@theme_id).color_scheme) ? "#{cs.id}-#{cs.version}" : false
+    cs = theme&.color_scheme
     category_updated = Category.where("uploaded_background_id IS NOT NULL").last_updated_at
 
-    if theme || category_updated > 0
-      Digest::SHA1.hexdigest "#{RailsMultisite::ConnectionManagement.current_db}-#{theme}-#{Stylesheet::Manager.last_file_updated}-#{category_updated}"
+    if cs || category_updated > 0
+      Digest::SHA1.hexdigest "#{RailsMultisite::ConnectionManagement.current_db}-#{cs&.id}-#{cs&.version}-#{Stylesheet::Manager.last_file_updated}-#{category_updated}"
     else
       digest_string = "defaults-#{Stylesheet::Manager.last_file_updated}"
 

@@ -138,7 +138,7 @@ class ColorScheme < ActiveRecord::Base
 
   def publish_discourse_stylesheet
     MessageBus.publish("/discourse_stylesheet", self.name)
-    DiscourseStylesheets.cache.clear
+    Stylesheet::Manager.cache.clear
   end
 
   def dump_hex_cache
