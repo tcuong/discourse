@@ -54,6 +54,7 @@ module Stylesheet
         {hash: SecureRandom.hex, name: "/stylesheets/#{name}.css"}
       end
 
+      Stylesheet::Manager.cache.clear
       MessageBus.publish '/file-change', message
     end
 

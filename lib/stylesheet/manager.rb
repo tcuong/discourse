@@ -16,9 +16,16 @@ class Stylesheet::Manager
     @cache ||= DistributedCache.new("discourse_stylesheet")
   end
 
-  def self.stylesheet_link_tag(target = :desktop, media = 'all', theme_id = -1)
+  def self.clear_theme_cache!
+    cache.hash.keys.select{|k| k =~ /theme/}.each{|k|cache.delete(k)}
+  end
 
-    tag = cache[target]
+  def self.stylesheet_link_tag(target = :desktop, media = 'all', theme_id = nil)
+
+    theme_id ||= SiteSetting.default_theme_id
+
+    cache_key = "#{target}_#{theme_id}"
+    tag = cache[cache_key]
 
     return tag.dup.html_safe if tag
 
@@ -28,8 +35,7 @@ class Stylesheet::Manager
       builder.ensure_digestless_file
       path = Rails.env.development? ? builder.stylesheet_relpath_no_digest : builder.stylesheet_cdnpath
       tag = %[<link href="#{path}" media="#{media}" rel="stylesheet" />]
-
-      cache[target] = tag
+      cache[cache_key] = tag
 
       tag.dup.html_safe
     end
@@ -202,7 +208,7 @@ class Stylesheet::Manager
 
   def color_scheme_digest
 
-    theme = (cs = Theme.find(@theme_id).color_scheme) ? "#{cs.id}-#{cs.version}" : false
+    theme = (cs = @theme_id && Theme.find(@theme_id).color_scheme) ? "#{cs.id}-#{cs.version}" : false
     category_updated = Category.where("uploaded_background_id IS NOT NULL").last_updated_at
 
     if theme || category_updated > 0

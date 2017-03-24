@@ -21,6 +21,11 @@ class StylesheetsController < ApplicationController
 
     target,digest = params[:name].split(/_([a-f0-9]{40})/)
 
+    if Rails.env == "development"
+      # TODO add theme
+      Stylesheet::Manager.stylesheet_link_tag(target)
+    end
+
     cache_time = request.env["HTTP_IF_MODIFIED_SINCE"]
     cache_time = Time.rfc2822(cache_time) rescue nil if cache_time
 
@@ -33,7 +38,7 @@ class StylesheetsController < ApplicationController
 
     # Security note, safe due to route constraint
     underscore_digest = digest ? "_" + digest : ""
-    location = "#{Rails.root}/#{DiscourseStylesheets::CACHE_PATH}/#{target}#{underscore_digest}#{extension}"
+    location = "#{Rails.root}/#{Stylesheet::Manager::CACHE_PATH}/#{target}#{underscore_digest}#{extension}"
 
     stylesheet_time = query.pluck(:created_at).first
 

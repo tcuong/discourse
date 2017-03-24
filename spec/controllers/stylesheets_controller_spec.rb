@@ -5,7 +5,7 @@ describe StylesheetsController do
   it 'can survive cache miss' do
 
     StylesheetCache.destroy_all
-    builder = DiscourseStylesheets.new('desktop_rtl')
+    builder = Stylesheet::Manager.new('desktop_rtl', nil)
     builder.compile
     builder.ensure_digestless_file
 
@@ -26,7 +26,7 @@ describe StylesheetsController do
     expect(cached.digest).to eq digest
 
     # tmp folder destruction and cached
-    `rm #{DiscourseStylesheets.cache_fullpath}/*`
+    `rm #{Stylesheet::Manager.cache_fullpath}/*`
 
     get :show, name: 'desktop_rtl'
     expect(response).to be_success

@@ -1,4 +1,4 @@
-require 'sassc'
+require_dependency 'stylesheet/common'
 
 module Stylesheet
   class Importer < SassC::Importer
@@ -13,16 +13,6 @@ module Stylesheet
       @special_imports[name] = blk
     end
 
-    def self.import_files(files)
-      files.map do |file|
-        # we never want inline css imports, they are a mess
-        # this tricks libsass so it imports inline instead
-        if file =~ /\.css$/
-          file = file[0..-5]
-        end
-        Import.new(file)
-      end
-    end
 
     register_import "plugins" do
       import_files(DiscoursePluginRegistry.stylesheets)
@@ -87,6 +77,17 @@ module Stylesheet
       @theme_id = options[:theme_id]
     end
 
+    def import_files(files)
+      files.map do |file|
+        # we never want inline css imports, they are a mess
+        # this tricks libsass so it imports inline instead
+        if file =~ /\.css$/
+          file = file[0..-5]
+        end
+        Import.new(file)
+      end
+    end
+
     def theme_import(name, attr)
       scss = theme.resolve_attr(attr)
 
@@ -115,7 +116,7 @@ module Stylesheet
           Import.new(asset[0..-2] + File.basename(path, ".*"))
         end
       elsif callback = Importer.special_imports[asset]
-        callback.bind(self).call
+        instance_eval(&callback)
       else
         Import.new(asset + ".scss")
       end

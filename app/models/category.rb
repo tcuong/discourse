@@ -491,7 +491,7 @@ SQL
   end
 
   def publish_discourse_stylesheet
-    raise NotImplemented
+    Stylesheet::Manager.cache.clear
   end
 
   def index_search

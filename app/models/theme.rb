@@ -134,6 +134,7 @@ COMPILED
   after_save do
     remove_from_cache!
     if any_stylesheet_changed?
+      Stylesheet::Manager.clear_theme_cache!
       [:dektop_theme, :embedded_theme, :mobile_theme].each do |theme|
         # Stylesheet::Manager.compile(theme, theme_id: self.id)
       end
@@ -162,33 +163,6 @@ COMPILED
 
   def self.baked_for_target(target=nil)
     "#{field_for_target(target)}_baked".to_sym
-  end
-
-  def self.enabled_stylesheet_contents(target=:desktop)
-    @cache["enabled_stylesheet_#{target}:#{COMPILER_VERSION}"] ||= where(enabled: true)
-      .order(:name)
-      .pluck(baked_for_target(target))
-      .compact
-      .join("\n")
-  end
-
-  def self.stylesheet_contents(key, target)
-    if key == ENABLED_KEY
-      enabled_stylesheet_contents(target)
-    else
-      where(key: key)
-        .pluck(baked_for_target(target))
-        .first
-    end
-  end
-
-  def self.custom_stylesheet(preview_style=nil, target=:desktop)
-    preview_style ||= ENABLED_KEY
-    if preview_style == ENABLED_KEY
-      stylesheet_link_tag(ENABLED_KEY, target, enabled_stylesheet_contents(target))
-    else
-      lookup_field(preview_style, target, :stylesheet_link_tag)
-    end
   end
 
   %i{header top footer head_tag body_tag}.each do |name|

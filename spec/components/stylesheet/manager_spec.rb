@@ -23,6 +23,8 @@ describe Stylesheet::Manager do
 
     theme.add_child_theme!(child_theme)
 
+    old_link = Stylesheet::Manager.stylesheet_link_tag(:desktop_theme, 'all', theme.id)
+
     manager = Stylesheet::Manager.new(:desktop_theme, theme.id)
     manager.compile(force: true)
 
@@ -34,10 +36,13 @@ describe Stylesheet::Manager do
     expect(css).to match(/\.common/)
     expect(css).to match(/\.desktop/)
 
-    #puts Stylesheet::Manager.stylesheet_link_tag(:desktop_theme, 'all', theme.id)
 
+    child_theme.desktop_scss = ".nothing{color: green;}"
+    child_theme.save!
 
-    boom
+    new_link = Stylesheet::Manager.stylesheet_link_tag(:desktop_theme, 'all', theme.id)
+
+    expect(new_link).not_to eq(old_link)
   end
 end
 

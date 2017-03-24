@@ -1,9 +1,7 @@
-require 'sassc'
+require_dependency 'stylesheet/common'
 require_dependency 'stylesheet/importer'
 
 module Stylesheet
-
-  ASSET_ROOT = "#{Rails.root}/app/assets/stylesheets"
 
   class Compiler
 
