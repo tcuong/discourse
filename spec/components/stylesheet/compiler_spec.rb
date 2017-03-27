@@ -9,6 +9,13 @@ describe Stylesheet::Compiler do
     css,_map = Stylesheet::Compiler.compile_asset("mobile")
     expect(css.length).to be > 1000
   end
+
+  it "supports asset-url" do
+    css,_map = Stylesheet::Compiler.compile(".body{background-image: asset-url('foo.png');}","test.scss")
+
+    expect(css).to include("url('/foo.png')")
+    expect(css).not_to include('asset-url')
+  end
 end
 
 

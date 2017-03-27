@@ -1,5 +1,6 @@
 require_dependency 'stylesheet/common'
 require_dependency 'stylesheet/importer'
+require_dependency 'stylesheet/functions'
 
 module Stylesheet
 
