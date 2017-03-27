@@ -11,7 +11,7 @@ function changed() {
   return _.some(trackedProperties, (p) => originals[p] !== this.get(p));
 }
 
-const SiteCustomization = RestModel.extend({
+const Theme = RestModel.extend({
   description: function() {
     return "" + this.name + (this.enabled ? ' (*)' : '');
   }.property('selected', 'name', 'enabled'),
@@ -28,4 +28,4 @@ const SiteCustomization = RestModel.extend({
 
 });
 
-export default SiteCustomization;
+export default Theme;

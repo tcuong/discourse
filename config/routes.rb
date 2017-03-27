@@ -171,8 +171,8 @@ Discourse::Application.routes.draw do
     get "/logs" => "staff_action_logs#index"
 
     get "customize" => "color_schemes#index", constraints: AdminConstraint.new
-    get "customize/css_html" => "theme#index", constraints: AdminConstraint.new
-    get "customize/css_html/:id/:section" => "theme#index", constraints: AdminConstraint.new
+    get "customize/themes" => "themes#index", constraints: AdminConstraint.new
+    get "customize/themes/:id/:section" => "themes#index", constraints: AdminConstraint.new
     get "customize/colors" => "color_schemes#index", constraints: AdminConstraint.new
     get "customize/permalinks" => "permalinks#index", constraints: AdminConstraint.new
     get "customize/embedding" => "embedding#show", constraints: AdminConstraint.new

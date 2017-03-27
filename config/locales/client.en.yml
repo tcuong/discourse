@@ -2792,9 +2792,10 @@ en:
           revert: "Revert Changes"
           revert_confirm: "Are you sure you want to revert your changes?"
 
-        css_html:
-          title: "CSS/HTML"
-          long_title: "CSS and HTML Customizations"
+        theme:
+          title: "Themes"
+          long_title: "Amend colors, CSS and HTML contents of your site"
+
         colors:
           title: "Colors"
           long_title: "Color Schemes"

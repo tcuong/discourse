@@ -15,10 +15,8 @@ export default function() {
     });
 
     this.route('adminCustomize', { path: '/customize', resetNamespace: true } ,function() {
-      this.route('colors');
-
-      this.route('adminCustomizeCssHtml', { path: 'css_html', resetNamespace: true }, function() {
-        this.route('show', {path: '/:site_customization_id/:section'});
+      this.route('adminCustomizeThemes', { path: 'themes', resetNamespace: true }, function() {
+        this.route('show', {path: '/:theme_id/:section'});
       });
 
       this.route('adminSiteText', { path: '/site_texts', resetNamespace: true }, function() {

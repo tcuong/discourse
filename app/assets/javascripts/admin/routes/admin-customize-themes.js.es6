@@ -3,15 +3,15 @@ import { popupAjaxError } from 'discourse/lib/ajax-error';
 
 export default Ember.Route.extend({
   model() {
-    return this.store.findAll('site-customization');
+    return this.store.findAll('theme');
   },
 
   actions: {
     importModal() {
-      showModal('upload-customization');
+      showModal('upload-theme');
     },
 
-    newCustomization(obj) {
+    newTheme(obj) {
       obj = obj || {name: I18n.t("admin.customize.new_style")};
       const item = this.store.createRecord('site-customization');
 
