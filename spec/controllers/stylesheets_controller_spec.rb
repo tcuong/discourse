@@ -38,4 +38,31 @@ describe StylesheetsController do
 
   end
 
+  it 'can lookup theme specific css' do
+    scheme = ColorScheme.create_from_base({name: "testing", colors: []})
+    theme = Theme.create!(name: "test", color_scheme_id: scheme.id, user_id: -1)
+
+    builder = Stylesheet::Manager.new(:desktop, theme.key)
+    builder.compile
+
+    `rm #{Stylesheet::Manager.cache_fullpath}/*`
+
+    get :show, name: builder.stylesheet_filename.sub(".css", "")
+    expect(response).to be_success
+
+    get :show, name: builder.stylesheet_filename_no_digest.sub(".css", "")
+    expect(response).to be_success
+
+    builder = Stylesheet::Manager.new(:desktop_theme, theme.key)
+    builder.compile
+
+    `rm #{Stylesheet::Manager.cache_fullpath}/*`
+
+    get :show, name: builder.stylesheet_filename.sub(".css", "")
+    expect(response).to be_success
+
+    get :show, name: builder.stylesheet_filename_no_digest.sub(".css", "")
+    expect(response).to be_success
+  end
+
 end

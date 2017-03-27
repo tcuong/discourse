@@ -90,10 +90,10 @@ class Stylesheet::Manager
   def compile(opts={})
     unless opts[:force]
       if File.exists?(stylesheet_fullpath)
-        unless StylesheetCache.where(target: @target, digest: digest).exists?
+        unless StylesheetCache.where(target: qualified_target, digest: digest).exists?
           begin
             source_map = File.read(source_map_fullpath) rescue nil
-            StylesheetCache.add(@target, digest, File.read(stylesheet_fullpath), source_map)
+            StylesheetCache.add(qualified_target, digest, File.read(stylesheet_fullpath), source_map)
           rescue => e
             Rails.logger.warn "Completely unexpected error adding contents of '#{stylesheet_fullpath}' to cache #{e}"
           end
@@ -123,7 +123,7 @@ class Stylesheet::Manager
     end
 
     begin
-      StylesheetCache.add(@target, digest, css, source_map)
+      StylesheetCache.add(qualified_target, digest, css, source_map)
     rescue => e
       Rails.logger.warn "Completely unexpected error adding item to cache #{e}"
     end
@@ -174,17 +174,32 @@ class Stylesheet::Manager
     "#{root_path}stylesheets/#{stylesheet_filename_no_digest}"
   end
 
-  def stylesheet_filename
-    "#{@target}_#{digest}.css"
+  def qualified_target
+    if is_theme?
+      "#{@target}_#{theme.id}"
+    else
+      scheme_string = theme && theme.color_scheme ? "_#{theme.color_scheme.id}" : ""
+      "#{@target}#{scheme_string}"
+    end
   end
+
+  def stylesheet_filename(with_digest = true)
+    digest_string = "_#{self.digest}" if with_digest
+    "#{qualified_target}#{digest_string}.css"
+  end
+
   def stylesheet_filename_no_digest
-    "#{@target}.css"
+    stylesheet_filename(_with_digest=false)
+  end
+
+  def is_theme?
+    !!(@target.to_s =~ /_theme$/)
   end
 
   # digest encodes the things that trigger a recompile
   def digest
     @digest ||= begin
-      if @target.to_s =~ /_theme$/
+      if is_theme?
         theme_digest
       else
         color_scheme_digest

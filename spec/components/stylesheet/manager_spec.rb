@@ -43,6 +43,9 @@ describe Stylesheet::Manager do
     new_link = Stylesheet::Manager.stylesheet_link_tag(:desktop_theme, 'all', theme.key)
 
     expect(new_link).not_to eq(old_link)
+
+    # our theme better have a name with the theme_id as part of it
+    expect(new_link).to include("/stylesheets/desktop_theme_#{theme.id}_")
   end
 end
 
