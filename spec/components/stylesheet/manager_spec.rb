@@ -43,7 +43,7 @@ describe Stylesheet::Manager do
     expect(css).to match(/\.desktop/)
 
 
-    child_theme.desktop_scss = ".nothing{color: green;}"
+    child_theme.set_field(:desktop, :scss, ".nothing{color: green;}")
     child_theme.save!
 
     new_link = Stylesheet::Manager.stylesheet_link_tag(:desktop_theme, 'all', theme.key)

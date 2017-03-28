@@ -86,6 +86,7 @@ class Theme < ActiveRecord::Base
   def resolve_baked_field(target, name)
     theme_ids = [self.id] + (child_themes.map(&:id) || [])
     fields = ThemeField.where(target: [Theme.targets[target], Theme.targets[:common]])
+                       .where(name: name.to_s)
                        .includes(:theme)
                        .joins("JOIN (
                              SELECT #{theme_ids.map.with_index{|id,idx| "#{id} AS theme_id, #{idx} AS sort_column"}.join(" UNION ALL SELECT ")}
@@ -93,14 +94,6 @@ class Theme < ActiveRecord::Base
                        .order('sort_column, target')
     fields.each(&:ensure_baked!)
     fields.map{|f| f.value_baked || f.value}.join("\n")
-  end
-
-  def resolve_attr(attribute)
-    resolved = [send(attribute)]
-    child_themes.each do |theme|
-      resolved << theme.send(attribute)
-    end
-    resolved.map!{|x| x.blank? ? nil : x}.compact.join("\n")
   end
 
   def remove_from_cache!

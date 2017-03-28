@@ -52,15 +52,15 @@ module Stylesheet
     register_import "embedded_theme" do
       next unless @theme_id
 
-      theme_import("embedded_theme.scss", :embedded_scss)
+      theme_import("embedded_theme.scss", :common, :embedded_scss)
     end
 
     register_import "mobile_theme" do
       next unless @theme_id
 
       [
-        theme_import("common_theme.scss", :common_scss),
-        theme_import("mobile_theme.scss", :mobile_scss)
+        theme_import("common_theme.scss", :common, :scss),
+        theme_import("mobile_theme.scss", :mobile, :scss)
       ].compact
     end
 
@@ -68,8 +68,8 @@ module Stylesheet
       next unless @theme_id
 
       [
-        theme_import("common_theme.scss", :common_scss),
-        theme_import("desktop_theme.scss", :desktop_scss)
+        theme_import("common_theme.scss", :common, :scss),
+        theme_import("desktop_theme.scss", :desktop, :scss)
       ].compact
     end
 
@@ -88,8 +88,8 @@ module Stylesheet
       end
     end
 
-    def theme_import(name, attr)
-      scss = theme.resolve_attr(attr)
+    def theme_import(name, target, attr)
+      scss = theme.resolve_baked_field(target, attr)
 
       if scss.blank?
         nil

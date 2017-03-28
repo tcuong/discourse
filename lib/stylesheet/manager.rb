@@ -218,10 +218,10 @@ class Stylesheet::Manager
     scss = ""
 
     if [:mobile_theme, :desktop_theme].include?(@target)
-      scss = theme.resolve_attr(:common_scss)
-      scss += theme.resolve_attr(@target.to_s.sub("theme", "scss"))
+      scss = theme.resolve_baked_field(:common, :scss)
+      scss += theme.resolve_baked_field(@target.to_s.sub("_theme", ""), :scss)
     elsif @target == :embedded_theme
-      scss = theme.resolve_attr(:embedded_scss)
+      scss = theme.resolve_baked_field(:common, :embedded_scss)
     else
       raise "attempting to look up theme digest for invalid field"
     end
