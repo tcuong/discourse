@@ -3,23 +3,29 @@ require 'stylesheet/compiler'
 
 describe Stylesheet::Manager do
   it 'can correctly compile theme css' do
-    theme = Theme.create!(
+    theme = Theme.new(
       name: 'parent',
-      user_id: -1,
-      common_scss: ".common{.scss{color: red;}}",
-      desktop_scss: ".desktop{.scss{color: red;}}",
-      mobile_scss: ".mobile{.scss{color: red;}}",
-      embedded_scss: ".embedded{.scss{color: red;}}",
+      user_id: -1
     )
 
-    child_theme = Theme.create!(
+    theme.set_field(:common, "scss", ".common{.scss{color: red;}}")
+    theme.set_field(:desktop, "scss", ".desktop{.scss{color: red;}}")
+    theme.set_field(:mobile, "scss", ".mobile{.scss{color: red;}}")
+    theme.set_field(:common, "embedded_scss", ".embedded{.scss{color: red;}}")
+
+    theme.save!
+
+
+    child_theme = Theme.new(
       name: 'parent',
       user_id: -1,
-      common_scss: ".child_common{.scss{color: red;}}",
-      desktop_scss: ".child_desktop{.scss{color: red;}}",
-      mobile_scss: ".child_mobile{.scss{color: red;}}",
-      embedded_scss: ".child_embedded{.scss{color: red;}}",
     )
+
+    child_theme.set_field(:common, "scss", ".child_common{.scss{color: red;}}")
+    child_theme.set_field(:desktop, "scss", ".child_desktop{.scss{color: red;}}")
+    child_theme.set_field(:mobile, "scss", ".child_mobile{.scss{color: red;}}")
+    child_theme.set_field(:common, "embedded_scss", ".child_embedded{.scss{color: red;}}")
+    child_theme.save!
 
     theme.add_child_theme!(child_theme)
 

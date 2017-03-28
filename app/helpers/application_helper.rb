@@ -325,6 +325,10 @@ module ApplicationHelper
     end
   end
 
+  def theme_lookup(name)
+    Theme.lookup_field(theme_key, mobile_view? ? :mobile : :desktop, name)
+  end
+
   def discourse_stylesheet_link_tag(name, opts={})
     if opts.key?(:theme_key)
       key = opts[:theme_key] unless customization_disabled?

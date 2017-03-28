@@ -407,8 +407,8 @@ class ApplicationController < ActionController::Base
     def custom_html_json
       target = view_context.mobile_view? ? :mobile : :desktop
       data = {
-        top: Theme.custom_top(session[:preview_style], target),
-        footer: Theme.custom_footer(session[:preview_style], target)
+        top: Theme.lookup_field(session[:preview_style], target, "after_header"),
+        footer: Theme.lookup_field(session[:preview_style], target, "footer")
       }
 
       if DiscoursePluginRegistry.custom_html
