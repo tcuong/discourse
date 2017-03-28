@@ -84,6 +84,9 @@ class Theme < ActiveRecord::Base
   end
 
   def resolve_baked_field(target, name)
+
+    target = target.to_sym
+
     theme_ids = [self.id] + (child_themes.map(&:id) || [])
     fields = ThemeField.where(target: [Theme.targets[target], Theme.targets[:common]])
                        .where(name: name.to_s)

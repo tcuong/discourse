@@ -84,7 +84,8 @@ COMPILED
 
   after_commit do
     ensure_baked!
-    Stylesheet::Manager.clear_theme_cache! if self.name == "scss"
+
+    Stylesheet::Manager.clear_theme_cache! if self.name.include?("scss")
 
     # TODO message for mobile vs desktop
     MessageBus.publish "/header-change/#{theme.key}", self.value if self.name == "header"
