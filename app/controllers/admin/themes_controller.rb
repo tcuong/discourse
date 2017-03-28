@@ -64,7 +64,7 @@ class Admin::ThemesController < Admin::AdminController
 
         response.headers['Content-Disposition'] = "attachment; filename=#{@theme.name.parameterize}.dcstyle.json"
         response.sending_file = true
-        render json: SiteCustomizationSerializer.new(@theme)
+        render json: ThemeSerializer.new(@theme)
       end
     end
 

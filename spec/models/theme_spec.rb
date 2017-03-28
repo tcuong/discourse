@@ -11,7 +11,7 @@ describe Theme do
   end
 
   let :customization_params do
-    {name: 'my name', user_id: user.id, header: "my awesome header", desktop_scss: "// my awesome css", mobile_stylesheet: nil, mobile_header: nil}
+    {name: 'my name', user_id: user.id, header: "my awesome header"}
   end
 
   let :customization do
@@ -24,31 +24,43 @@ describe Theme do
   end
 
   it 'can support child themes' do
-    child = Theme.create!(name: '2', user_id: user.id, header: 'World',
-                               mobile_header: 'hi', footer: 'footer',
-                               desktop_scss: '.hello{.world {color: blue;}}')
+    child = Theme.new(name: '2', user_id: user.id)
 
-    parent = Theme.create!(name: '1', user_id: user.id, header: 'Hello',
-                              mobile_footer: 'mfooter',
-                              mobile_scss: '.hello{margin: 1px;}',
-                              desktop_scss: 'p{width: 1px;}'
-                             )
+    child.set_field(:common, "header", "World")
+    child.set_field(:desktop, "header", "Desktop")
+    child.set_field(:mobile, "header", "Mobile")
 
+    child.save!
+
+    expect(Theme.lookup_field(child.key, :desktop, "header")).to eq("World\nDesktop")
+    expect(Theme.lookup_field(child.key, "mobile", :header)).to eq("World\nMobile")
+
+
+    child.set_field(:common, "header", "Worldie")
+    child.save!
+
+    expect(Theme.lookup_field(child.key, :mobile, :header)).to eq("Worldie\nMobile")
+
+    parent = Theme.new(name: '1', user_id: user.id)
+
+    parent.set_field(:common, "header", "Common Parent")
+    parent.set_field(:mobile, "header", "Mobile Parent")
+
+    parent.save!
 
     parent.add_child_theme!(child)
 
-    expect(Theme.custom_header(parent.key)).to eq("Hello\nWorld")
-    expect(Theme.custom_header(parent.key, :mobile)).to eq("hi")
-    expect(Theme.custom_footer(parent.key, :mobile)).to eq("mfooter")
-    expect(Theme.custom_footer(parent.key)).to eq("footer")
+    expect(Theme.lookup_field(parent.key, :mobile, "header")).to eq("Common Parent\nMobile Parent\nWorldie\nMobile")
 
   end
 
 
   it 'should correct bad html in body_tag_baked and head_tag_baked' do
-    c = Theme.create!(user_id: -1, name: "test", head_tag: "<b>I am bold", body_tag: "<b>I am bold")
-    expect(c.head_tag_baked).to eq("<b>I am bold</b>")
-    expect(c.body_tag_baked).to eq("<b>I am bold</b>")
+    theme = Theme.new(user_id: -1, name: "test")
+    theme.set_field(:common, "head_tag", "<b>I am bold")
+    theme.save!
+
+    expect(Theme.lookup_field(theme.key, :desktop, "head_tag")).to eq("<b>I am bold</b>")
   end
 
   it 'should precompile fragments in body and head tags' do
@@ -60,23 +72,31 @@ describe Theme do
       {{hello}}
     </script>
 HTML
-    c = Theme.create!(user_id: -1, name: "test", head_tag: with_template, body_tag: with_template)
-    expect(c.head_tag_baked).to match(/HTMLBars/)
-    expect(c.body_tag_baked).to match(/HTMLBars/)
-    expect(c.body_tag_baked).to match(/raw-handlebars/)
-    expect(c.head_tag_baked).to match(/raw-handlebars/)
+    theme = Theme.new(user_id: -1, name: "test")
+    theme.set_field(:common, "header", with_template)
+    theme.save!
+
+    baked = Theme.lookup_field(theme.key, :mobile, "header")
+
+    expect(baked).to match(/HTMLBars/)
+    expect(baked).to match(/raw-handlebars/)
   end
 
   it 'should create body_tag_baked on demand if needed' do
-    t = Theme.create!(user_id: -1, name: "test", head_tag: "<b>test")
-    t.update_columns(head_tag_baked: nil)
-    expect(Theme.custom_head_tag(t.key)).to match(/<b>test<\/b>/)
+
+    theme = Theme.new(user_id: -1, name: "test")
+    theme.set_field(:common, :body_tag, "<b>test")
+    theme.save
+
+    ThemeField.update_all(value_baked: nil)
+
+    expect(Theme.lookup_field(theme.key, :desktop, :body_tag)).to match(/<b>test<\/b>/)
   end
 
   context "plugin api" do
     def transpile(html)
-      c = Theme.create!(user_id: -1, name: "test", head_tag: html, body_tag: html)
-      c.head_tag_baked
+      f = ThemeField.create!(target: Theme.targets[:mobile], theme_id: -1, name: "after_header", value: html)
+      f.value_baked
     end
 
     it "transpiles ES6 code" do

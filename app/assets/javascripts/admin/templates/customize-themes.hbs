@@ -1,13 +1,14 @@
+{{#unless editingTheme}}
 <div class='content-list span6'>
   <h3>{{i18n 'admin.customize.theme.long_title'}}</h3>
   <ul>
-    {{#each model as |c|}}
-      {{customize-link customization=c}}
+    {{#each model as |t|}}
+      {{theme-link theme=t}}
     {{/each}}
   </ul>
 
-  {{d-button label="admin.customize.new" icon="plus" action="newCustomization" class="btn-primary"}}
+  {{d-button label="admin.customize.new" icon="plus" action="newTheme" class="btn-primary"}}
   {{d-button action="importModal" icon="upload" label="admin.customize.import"}}
 </div>
-
+{{/unless}}
 {{outlet}}

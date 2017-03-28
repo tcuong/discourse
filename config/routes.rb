@@ -172,7 +172,6 @@ Discourse::Application.routes.draw do
 
     get "customize" => "color_schemes#index", constraints: AdminConstraint.new
     get "customize/themes" => "themes#index", constraints: AdminConstraint.new
-    get "customize/themes/:id/:section" => "themes#index", constraints: AdminConstraint.new
     get "customize/colors" => "color_schemes#index", constraints: AdminConstraint.new
     get "customize/permalinks" => "permalinks#index", constraints: AdminConstraint.new
     get "customize/embedding" => "embedding#show", constraints: AdminConstraint.new
@@ -188,6 +187,8 @@ Discourse::Application.routes.draw do
     scope "/customize", constraints: AdminConstraint.new do
       resources :user_fields, constraints: AdminConstraint.new
       resources :emojis, constraints: AdminConstraint.new
+
+      get 'themes/:id/css/edit' => 'themes#index'
 
       # They have periods in their URLs often:
       get 'site_texts'          => 'site_texts#index'
@@ -382,8 +383,8 @@ Discourse::Application.routes.draw do
 
   get "highlight-js/:hostname/:version.js" => "highlight_js#show", format: false, constraints: { hostname: /[\w\.-]+/ }
 
-  get "stylesheets/:name.css.map" => "stylesheets#show_source_map", constraints: { name: /[a-z0-9_]+/ }
-  get "stylesheets/:name.css" => "stylesheets#show", constraints: { name: /[a-z0-9_]+/ }
+  get "stylesheets/:name.css.map" => "stylesheets#show_source_map", constraints: { name: /[-a-z0-9_]+/ }
+  get "stylesheets/:name.css" => "stylesheets#show", constraints: { name: /[-a-z0-9_]+/ }
 
   post "uploads" => "uploads#create"
 

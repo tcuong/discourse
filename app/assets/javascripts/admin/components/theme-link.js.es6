@@ -6,7 +6,7 @@ export default Ember.Component.extend({
   }.property(),
 
   active: function() {
-    const id = this.get('customization.id');
-    return this.get('router.url').indexOf(`/customize/css_html/${id}/css`) !== -1;
-  }.property('router.url', 'customization.id')
+    const id = this.get('theme.id');
+    return this.get('router.url').indexOf(`/customize/themes/${id}/css`) !== -1;
+  }.property('router.url', 'theme.id')
 });

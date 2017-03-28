@@ -2795,6 +2795,7 @@ en:
         theme:
           title: "Themes"
           long_title: "Amend colors, CSS and HTML contents of your site"
+          edit: "Edit"
 
         colors:
           title: "Colors"

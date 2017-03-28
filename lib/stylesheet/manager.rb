@@ -22,6 +22,8 @@ class Stylesheet::Manager
 
   def self.stylesheet_link_tag(target = :desktop, media = 'all', theme_key = :missing)
 
+    target = target.to_sym
+
     if theme_key == :missing
       theme_key = SiteSetting.default_theme_key
     end
