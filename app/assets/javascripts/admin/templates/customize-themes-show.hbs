@@ -4,5 +4,5 @@
     <a class="btn export" target="_blank" href={{downloadUrl}}>{{fa-icon "download"}} {{i18n 'admin.export_json.button_text'}}</a>
   </div>
 
-  <a href="/admin/customize/themes/{{model.id}}/css/edit" class="btn edit">{{i18n 'admin.theme.edit'}}</a>
+  {{#link-to 'adminCustomizeThemes.edit' model class="btn edit"}}{{i18n 'admin.customize.theme.edit'}}{{/link-to}}
 </div>

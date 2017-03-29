@@ -188,7 +188,8 @@ Discourse::Application.routes.draw do
       resources :user_fields, constraints: AdminConstraint.new
       resources :emojis, constraints: AdminConstraint.new
 
-      get 'themes/:id/css/edit' => 'themes#index'
+      get 'themes/:id/:target/:field_name/edit' => 'themes#index'
+      get 'themes/:id/css' => 'themes#index'
 
       # They have periods in their URLs often:
       get 'site_texts'          => 'site_texts#index'
