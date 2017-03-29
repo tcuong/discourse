@@ -326,7 +326,8 @@ module ApplicationHelper
   end
 
   def theme_lookup(name)
-    Theme.lookup_field(theme_key, mobile_view? ? :mobile : :desktop, name)
+    lookup = Theme.lookup_field(theme_key, mobile_view? ? :mobile : :desktop, name)
+    lookup.html_safe if lookup
   end
 
   def discourse_stylesheet_link_tag(name, opts={})

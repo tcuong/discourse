@@ -13,34 +13,53 @@ describe Admin::ThemesController do
 
     context ' .index' do
       it 'returns success' do
-        Theme.create!(name: 'my name', user_id: Fabricate(:user).id, header: "my awesome header", desktop_scss: "my awesome css")
-        xhr :get, :index
-        expect(response).to be_success
-      end
+        theme = Theme.new(name: 'my name', user_id: -1)
+        theme.set_field(:common, :scss, '.body{color: black;}')
+        theme.set_field(:desktop, :after_header, '<b>test</b>')
+        theme.save
 
-      it 'returns JSON' do
         xhr :get, :index
-        expect(::JSON.parse(response.body)).to be_present
+
+        expect(response).to be_success
+
+        json = ::JSON.parse(response.body)
+        theme_json = json["themes"].find{|t| t["id"] == theme.id}
+        expect(theme_json["theme_fields"].length).to eq(2)
       end
     end
 
     context ' .create' do
-      it 'returns success' do
-        xhr :post, :create, theme: {name: 'my test name'}
+      it 'creates a theme' do
+        xhr :post, :create, theme: {name: 'my test name', theme_fields: [name: 'scss', target: 'common', value: 'body{color: red;}']}
         expect(response).to be_success
-      end
 
-      it 'returns json' do
-        xhr :post, :create, theme: {name: 'my test name'}
-        expect(::JSON.parse(response.body)).to be_present
-      end
+        json = ::JSON.parse(response.body)
 
-      it 'logs the change' do
-        StaffActionLogger.any_instance.expects(:log_theme_change).once
-        xhr :post, :create, theme: {name: 'my test name'}
+        expect(json["theme"]["theme_fields"].length).to eq(1)
+        expect(UserHistory.where(action: UserHistory.actions[:change_theme]).count).to eq(1)
       end
     end
 
+    context ' .update' do
+      it 'updates a theme' do
+
+        theme = Theme.new(name: 'my name', user_id: -1)
+        theme.set_field(:common, :scss, '.body{color: black;}')
+        theme.save
+
+        xhr :put, :update, id: theme.id,
+            theme: {name: 'my test name', theme_fields: [name: 'scss', target: 'common', value: 'body{color: red;}']}
+        expect(response).to be_success
+
+        json = ::JSON.parse(response.body)
+        fields = json["theme"]["theme_fields"]
+
+        expect(fields.length).to eq(1)
+        expect(fields.first["value"]).to eq('body{color: red;}')
+
+        expect(UserHistory.where(action: UserHistory.actions[:change_theme]).count).to eq(1)
+      end
+    end
   end
 
 end

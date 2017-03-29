@@ -10,7 +10,7 @@
     <%- else %>
         <%= discourse_stylesheet_link_tag(mobile_view? ? :mobile : :desktop) %>
     <%- end %>
-    <%= raw theme_lookup("head_tag") %>
+    <%= theme_lookup("head_tag") %>
     <%= render_google_universal_analytics_code %>
     <%= yield :head %>
   </head>
@@ -33,7 +33,7 @@
       <p><%= t 'powered_by_html' %></p>
     </footer>
     <%= render_google_analytics_code %>
-    <%= raw theme_lookup("body_tag") %>
+    <%= theme_lookup("body_tag") %>
   </body>
   <%= yield :after_body %>
 </html>

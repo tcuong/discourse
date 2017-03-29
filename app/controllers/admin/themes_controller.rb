@@ -1,11 +1,9 @@
 class Admin::ThemesController < Admin::AdminController
 
-  before_filter :enable_theme
-
   skip_before_filter :check_xhr, only: [:show]
 
   def index
-    @theme = Theme.order(:name)
+    @theme = Theme.order(:name).includes(:theme_fields)
 
     respond_to do |format|
       format.json { render json: @theme }
@@ -13,8 +11,9 @@ class Admin::ThemesController < Admin::AdminController
   end
 
   def create
-    @theme = Theme.new(theme_params)
-    @theme.user_id = current_user.id
+    @theme = Theme.new(name: theme_params[:name], user_id: current_user.id)
+
+    set_fields
 
     respond_to do |format|
       if @theme.save
@@ -28,13 +27,15 @@ class Admin::ThemesController < Admin::AdminController
 
   def update
     @theme = Theme.find(params[:id])
-    log_record = log_theme_change(@theme, theme_params)
+    @theme.name = theme_params[:name]
+
+    set_fields
 
     respond_to do |format|
-      if @theme.update_attributes(theme_params)
+      if @theme.save
+        log_theme_change(@theme, theme_params)
         format.json { render json: @theme, status: :created}
       else
-        log_record.destroy if log_record
         format.json { render json: @theme.errors, status: :unprocessable_entity }
       end
     end
@@ -73,19 +74,19 @@ class Admin::ThemesController < Admin::AdminController
   private
 
     def theme_params
-      params.require(:theme)
-            .permit(:name, :desktop_scss, :mobile_scss, :common_scss, :header, :top, :footer,
-                    :mobile_header, :mobile_top, :mobile_footer,
-                    :head_tag, :body_tag,
-                    :position, :key, :embedded_scss)
+      @theme_params ||=
+        params.require(:theme)
+            .permit(:name, theme_fields: [:name, :target, :value])
+    end
+
+    def set_fields
+      theme_params[:theme_fields].each do |field|
+        @theme.set_field(field[:target], field[:name], field[:value])
+      end
     end
 
     def log_theme_change(old_record, new_params)
       StaffActionLogger.new(current_user).log_theme_change(old_record, new_params)
-    end
-
-    def enable_theme
-      session[:disable_customization] = false
     end
 
 end

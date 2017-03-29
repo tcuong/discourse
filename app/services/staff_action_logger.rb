@@ -113,24 +113,22 @@ class StaffActionLogger
     }))
   end
 
-  THEME_LOGGED_ATTRS = [
-    'common_scss', 'mobile_scss', 'desktop_scss',
-    'header', 'mobile_header',
-    'top', 'mobile_top',
-    'footer', 'mobile_footer',
-    'head_tag',
-    'body_tag',
-    'position',
-    'key'
-  ]
+  def theme_json(theme)
+    json = ThemeSerializer.new(theme).to_json
+    # unroot it
+    ::JSON.parse(json)["theme"].to_json
+  end
 
   def log_theme_change(old_record, theme_params, opts={})
     raise Discourse::InvalidParameters.new(:theme_params) unless theme_params
+
+    old_json = theme_json(old_record) if old_record
+
     UserHistory.create( params(opts).merge({
       action: UserHistory.actions[:change_theme],
       subject: theme_params[:name],
-      previous_value: old_record ? old_record.attributes.slice(*THEME_LOGGED_ATTRS).to_json : nil,
-      new_value: theme_params.slice(*(THEME_LOGGED_ATTRS.map(&:to_sym))).to_json
+      previous_value: old_json,
+      new_value: theme_params.to_json
     }))
   end
 
@@ -139,7 +137,7 @@ class StaffActionLogger
     UserHistory.create( params(opts).merge({
       action: UserHistory.actions[:delete_theme],
       subject: theme.name,
-      previous_value: theme.attributes.slice(*THEME_LOGGED_ATTRS).to_json
+      previous_value: theme_json(theme)
     }))
   end
 
