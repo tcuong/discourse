@@ -2711,6 +2711,7 @@ en:
 
   color_schemes:
     base_theme_name: "Base"
+    default: "Light Scheme"
 
   about: "About"
   guidelines: "Guidelines"

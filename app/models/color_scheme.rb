@@ -63,13 +63,9 @@ class ColorScheme < ActiveRecord::Base
     @base_colors
   end
 
-  def self.enabled
-    current_version.find_by(enabled: true)
-  end
-
   def self.base
     return @base_color_scheme if @base_color_scheme
-    @base_color_scheme = new(name: I18n.t('color_schemes.base_theme_name'), enabled: false)
+    @base_color_scheme = new(name: I18n.t('color_schemes.base_theme_name'))
     @base_color_scheme.colors = base_colors.map { |name, hex| {name: name, hex: hex} }
     @base_color_scheme.is_base = true
     @base_color_scheme
@@ -100,7 +96,7 @@ class ColorScheme < ActiveRecord::Base
     end
 
     # Can't use `where` here because base doesn't allow it
-    (enabled || base).colors.find {|c| c.name == name }.try(:hex) || :nil
+    (base).colors.find {|c| c.name == name }.try(:hex) || :nil
   end
 
   def self.hex_for_name(name)
@@ -153,7 +149,6 @@ end
 #
 #  id           :integer          not null, primary key
 #  name         :string           not null
-#  enabled      :boolean          default(FALSE), not null
 #  versioned_id :integer
 #  version      :integer          default(1), not null
 #  created_at   :datetime         not null

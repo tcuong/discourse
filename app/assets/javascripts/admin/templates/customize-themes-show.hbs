@@ -11,7 +11,11 @@
 
   <h3>Color Scheme</h3>
   <p>Select your Color Scheme </p>
-  <p>{{combo-box}}</p>
+  <p>{{combo-box content=colorSchemes
+                 nameProperty="name"
+                 value=model.color_scheme_id
+                 valueAttribute="id"}}
+  </p>
   {{#link-to 'adminCustomizeThemes.edit' model class="btn edit"}}{{i18n 'admin.customize.theme.edit'}}{{/link-to}}
 
   <h3>Custom HTML/CSS</h3>

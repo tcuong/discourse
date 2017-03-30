@@ -4,9 +4,19 @@ class Admin::ThemesController < Admin::AdminController
 
   def index
     @theme = Theme.order(:name).includes(:theme_fields)
+    @color_schemes = ColorScheme.where(versioned_id: nil).to_a
+    light = ColorScheme.new(name: I18n.t("color_schemes.default"))
+    @color_schemes.unshift(light)
+
+    payload = {
+      themes: @theme,
+      extras: {
+        color_schemes: @color_schemes
+      }
+    }
 
     respond_to do |format|
-      format.json { render json: @theme }
+      format.json { render json: payload }
     end
   end
 
