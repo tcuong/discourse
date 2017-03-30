@@ -1,29 +1,57 @@
 import RestModel from 'discourse/models/rest';
-
-const trackedProperties = [
-  'enabled', 'name', 'stylesheet', 'header', 'top', 'footer', 'mobile_stylesheet',
-  'mobile_header', 'mobile_top', 'mobile_footer', 'head_tag', 'body_tag', 'embedded_css'
-];
-
-function changed() {
-  const originals = this.get('originals');
-  if (!originals) { return false; }
-  return _.some(trackedProperties, (p) => originals[p] !== this.get(p));
-}
+import { default as computed } from 'ember-addons/ember-computed-decorators';
 
 const Theme = RestModel.extend({
+
+  @computed('theme_fields')
+  themeFields(fields) {
+
+    if (!fields) {
+      this.set('theme_fields', []);
+      return {};
+    }
+
+    let hash = {};
+    if (fields) {
+      fields.forEach(field=>{
+        hash[field.target + " " + field.name] = field;
+      });
+    }
+    return hash;
+  },
+
+  getField(target, name) {
+    let themeFields = this.get("themeFields");
+    let key = target + " " + name;
+    let field = themeFields[key];
+    return field ? field.value : "";
+  },
+
+  setField(target, name, value) {
+    this.set("changed", true);
+
+    let themeFields = this.get("themeFields");
+    let key = target + " " + name;
+    let field = themeFields[key];
+    if (!field) {
+      field = {name, target, value};
+      this.theme_fields.push(field);
+      themeFields[key] = field;
+    } else {
+      field.value = value;
+    }
+  },
+
   description: function() {
     return "" + this.name + (this.enabled ? ' (*)' : '');
   }.property('selected', 'name', 'enabled'),
 
-  changed: changed.property.apply(changed, trackedProperties.concat('originals')),
-
-  startTrackingChanges: function() {
-    this.set('originals', this.getProperties(trackedProperties));
-  }.on('init'),
+  changed: false,
 
   saveChanges() {
-    return this.save(this.getProperties(trackedProperties)).then(() => this.startTrackingChanges());
+    return this.save(
+        this.getProperties("name", "theme_fields")
+    ).then(() => this.set("changed", false));
   },
 
 });

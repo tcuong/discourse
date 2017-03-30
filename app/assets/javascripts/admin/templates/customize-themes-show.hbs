@@ -1,8 +1,28 @@
-<div class="current-style">
-  <div class='wrapper'>
-    <h2>{{model.name}}</h2>
-    <a class="btn export" target="_blank" href={{downloadUrl}}>{{fa-icon "download"}} {{i18n 'admin.export_json.button_text'}}</a>
-  </div>
+<div class="show-current-style">
+  <h2>
+    {{#if editingName}}
+      {{text-field value=model.name autofocus="true"}}
+      {{d-button action="finishedEditingName" class="btn-primary btn-small submit-edit" icon="check"}}
+      {{d-button action="cancelEditingName" class="btn-small cancel-edit" icon="times"}}
+    {{else}}
+      {{model.name}} <a {{action "startEditingName"}}>{{fa-icon "pencil"}}</a>
+    {{/if}}
+  </h2>
 
+  <h3>Color Scheme</h3>
+  <p>Select your Color Scheme </p>
+  <p>{{combo-box}}</p>
   {{#link-to 'adminCustomizeThemes.edit' model class="btn edit"}}{{i18n 'admin.customize.theme.edit'}}{{/link-to}}
+
+  <h3>Custom HTML/CSS</h3>
+  <p>Change specific CSS and HTML customization
+  {{#link-to 'adminCustomizeThemes.edit' model.id "common" "scss" class="btn edit"}}{{i18n 'admin.customize.theme.edit'}}{{/link-to}}
+  </p>
+
+  <h3>Included Themes</h3>
+  <p>Select custom themes to be included in current theme.</p>
+
+  <a class="btn export" target="_blank" href={{downloadUrl}}>{{fa-icon "download"}} {{i18n 'admin.export_json.button_text'}}</a>
+
+  {{d-button action="destroy" label="admin.customize.delete" icon="trash" class="btn-danger"}}
 </div>

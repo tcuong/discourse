@@ -94,11 +94,10 @@ export default Ember.Object.extend({
     const typeField = Ember.String.underscore(type);
     data[typeField] = attrs;
 
-
     return ajax(this.pathFor(store, type, id), this.getPayload('PUT', data))
       .then(function(json) {
           return new Result(json[typeField], json);
-    });
+      });
   },
 
   createRecord(store, type, attrs) {

@@ -35,16 +35,16 @@ export default Ember.Controller.extend({
 
   @computed("fieldName")
   activeSectionMode(fieldName) {
-    return fieldName && fieldName.indexOf("scss") > 0 ? "css" : "html";
+    return fieldName && fieldName.indexOf("scss") > -1 ? "css" : "html";
   },
 
-  @computed("fieldName", "currentTarget")
+  @computed("fieldName", "currentTargetName", "model")
   activeSection: {
-    get(fieldName, target) {
-      // this.get("model")
-      return target + fieldName;
+    get(fieldName, target, model) {
+      return model.getField(target, fieldName);
     },
-    set(value, fieldName, target) {
+    set(value, fieldName, target, model) {
+      model.setField(target, fieldName, value);
       return value;
     }
   },
@@ -78,10 +78,6 @@ export default Ember.Controller.extend({
 
   previewUrl: url('model.key', '/?preview-style=%@'),
   downloadUrl: url('model.id', '/admin/site_customizations/%@'),
-
-  mobile: function() {
-    return this.get('section').indexOf('mobile-') === 0;
-  }.property('section'),
 
   maximizeIcon: function() {
     return this.get('maximized') ? 'compress' : 'expand';

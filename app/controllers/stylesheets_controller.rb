@@ -68,8 +68,13 @@ class StylesheetsController < ApplicationController
       end
     end
 
-    response.headers['Last-Modified'] = stylesheet_time.httpdate if stylesheet_time
-    immutable_for(1.year) unless Rails.env == "development"
+    if Rails.env == "development"
+      response.headers['Last-Modified'] = Time.zone.now.httpdate
+      immutable_for(1.second)
+    else
+      response.headers['Last-Modified'] = stylesheet_time.httpdate if stylesheet_time
+      immutable_for(1.year)
+    end
     send_file(location, disposition: :inline)
   end
 

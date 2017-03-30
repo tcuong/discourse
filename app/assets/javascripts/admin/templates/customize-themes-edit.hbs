@@ -1,13 +1,29 @@
 <div class="current-style {{if maximized 'maximized'}}">
   <div class='wrapper'>
-    {{text-field class="style-name" value=model.name}}
+    <h2><a>{{model.name}}</a> Custom Sections</h2>
 
-    <div>
-      {{i18n "admin.customize.theme.customize_desc"}} {{combo-box content=targets value=currentTarget}}
-    </div>
+    <ul class='nav nav-pills target'>
+      <li>
+        {{#link-to 'adminCustomizeThemes.edit' model.id 'common' fieldName replace=true title=field.title}}
+          {{i18n 'admin.customize.theme.common'}}
+        {{/link-to}}
+      </li>
+      <li>
+        {{#link-to 'adminCustomizeThemes.edit' model.id 'desktop' fieldName replace=true title=field.title}}
+          {{i18n 'admin.customize.theme.desktop'}}
+          {{fa-icon 'desktop'}}
+        {{/link-to}}
+      </li>
+      <li>
+        {{#link-to 'adminCustomizeThemes.edit' model.id 'mobile' fieldName replace=true title=field.title}}
+          {{i18n 'admin.customize.theme.mobile'}}
+          {{fa-icon 'mobile'}}
+        {{/link-to}}
+      </li>
+    </ul>
 
     <div class='admin-controls'>
-      <ul class='nav nav-pills'>
+      <ul class='nav nav-pills fields'>
         {{#each fields as |field|}}
           <li>
             {{#link-to 'adminCustomizeThemes.edit' model.id currentTargetName field.name replace=true title=field.title}}
@@ -25,6 +41,7 @@
     </div>
 
     <div class="admin-container">
+      <div class='custom-ace-gutter'></div>
       {{ace-editor content=activeSection mode=activeSectionMode}}
     </div>
 
@@ -32,10 +49,6 @@
       <div class='status-actions'>
         {{#unless model.changed}}
           <a class='preview-link' href={{previewUrl}} target='_blank' title="{{i18n 'admin.customize.explain_preview'}}">{{i18n 'admin.customize.preview'}}</a>
-          |
-          <a href={{undoPreviewUrl}} target='_blank' title="{{i18n 'admin.customize.explain_undo_preview'}}">{{i18n 'admin.customize.undo_preview'}}</a>
-          |
-          <a href={{defaultStyleUrl}} target='_blank' title="{{i18n 'admin.customize.explain_rescue_preview'}}">{{i18n 'admin.customize.rescue_preview'}}</a><br>
         {{/unless}}
       </div>
 
@@ -43,7 +56,6 @@
         {{#d-button action="save" disabled=saveDisabled class='btn-primary'}}
           {{saveButtonText}}
         {{/d-button}}
-        {{d-button action="destroy" label="admin.customize.delete" icon="trash" class="btn-danger"}}
       </div>
     </div>
   </div>

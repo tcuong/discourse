@@ -41,6 +41,7 @@ export default Ember.Component.extend({
 
         editor.setTheme("ace/theme/chrome");
         editor.setShowPrintMargin(false);
+        editor.setOptions({fontSize: "14px"});
         editor.getSession().setMode("ace/mode/" + this.get('mode'));
         editor.on('change', () => {
           this._skipContentChangeEvent = true;

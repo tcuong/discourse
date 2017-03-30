@@ -2,8 +2,12 @@
 <div class='content-list span6'>
   <h3>{{i18n 'admin.customize.theme.long_title'}}</h3>
   <ul>
-    {{#each model as |t|}}
-      {{theme-link theme=t}}
+    {{#each model as |theme|}}
+      <li>
+        {{#link-to 'adminCustomizeThemes.show' theme replace=true}}
+          {{theme.description}}
+        {{/link-to}}
+      </li>
     {{/each}}
   </ul>
 
