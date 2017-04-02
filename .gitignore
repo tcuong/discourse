@@ -112,3 +112,5 @@ vendor/bundle/*
 
 #ignore jetbrains ide file
 *.iml
+
+config/discourse.config
