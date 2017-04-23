@@ -126,23 +126,12 @@ vi:
         enabled: đã gắn toàn trang lúc %{when}
         disabled: đã bỏ gắn lúc %{when}
       visible:
-        enabled: được hiển thị lúc %{when}
-        disabled: bỏ hiển thị lúc %{when}
-      banner:
-        enabled: made this a banner %{when}. It will appear at the top of every page
-          until it is dismissed by the user.
-        disabled: removed this banner %{when}. It will no longer appear at the top
-          of every page.
-    topic_admin_menu: Lựa chọn quản lí chủ đề.
-    wizard_required: Đến lúc tuỳ biến diễn đàn của bạn! <a href='%{url}' data-auto-route='true'>Bắt
-      đầu</a>!
-    emails_are_disabled: Ban quản trị đã tắt mọi email gửi đi. Sẽ không có bất kỳ
-      thông báo nào qua email được gửi đi.
-    bootstrap_mode_enabled: Để đơn giản hoá quá trình triển khai, bạn đang ở trong
-      chế độ bootstrap. Mọi người dùng mới đều có trust level 1 và sẽ nhận được email
-      cập nhật thông tin mỗi ngày. Chế độ này sẽ tự động tắt khi số người dùng vượt
-      qua %{min_users}.
-    bootstrap_mode_disabled: Chế độ bootstrap sẽ bị tắt trong 24 giờ tới.
+        enabled: 'được hiển thị lúc %{when}'
+        disabled: 'bỏ hiển thị lúc %{when}'
+    topic_admin_menu: "Lựa chọn quản lí chủ đề."
+    emails_are_disabled: "Ban quản trị đã tắt mọi email gửi đi. Sẽ không có bất kỳ thông báo nào qua email được gửi đi."
+    bootstrap_mode_enabled: "Để đơn giản hoá quá trình triển khai, bạn đang ở trong chế độ bootstrap. Mọi người dùng mới đều có trust level 1 và sẽ nhận được email cập nhật thông tin mỗi ngày. Chế độ này sẽ tự động tắt khi số người dùng vượt qua %{min_users}."
+    bootstrap_mode_disabled: "Chế độ bootstrap sẽ bị tắt trong 24 giờ tới."
     s3:
       regions:
         us_east_1: US East (N. Virginia)
@@ -374,16 +363,14 @@ vi:
       request: Xin gia nhập nhóm
       automatic_group: Nhóm tự động
       closed_group: Nhóm riêng
-      is_group_user: Bạn là một thành viên của nhóm này
-      allow_membership_requests: Cho phép người dùng gửi thư xin gia nhập cho người
-        đứng đầu nhóm (Yêu cầu mọi người phải có quyền nhắc tới nhóm)
-      membership: Thành viên
-      name: Tên
-      user_count: Số lượng thành viên
-      bio: Thông tin về nhóm
-      selector_placeholder: Thêm thành viên
-      owner: chủ
-      visible: Mọi thành viên có thể nhìn thấy nhóm
+      is_group_user: "Bạn là một thành viên của nhóm này"
+      membership: "Thành viên"
+      name: "Tên"
+      user_count: "Số lượng thành viên"
+      bio: "Thông tin về nhóm"
+      selector_placeholder: "Thêm thành viên"
+      owner: "chủ"
+      visible: "Mọi thành viên có thể nhìn thấy nhóm"
       index:
         title: Nhóm
         empty: Không có nhóm công khai nào.
@@ -1005,35 +992,28 @@ vi:
         {username} </ b>
       complete_email_not_found: Không tìm thấy tài khoản nào tương ứng với <b>%{email}</b>
     login:
-      title: Đăng nhập
-      username: Thành viên
-      password: Mật khẩu
-      email_placeholder: 'Email hoặc tên đăng nhập '
-      caps_lock_warning: Phím Caps Lock đang được bật
-      error: Không xác định được lỗi
-      rate_limit: Xin đợi trước khi đăng nhập lại lần nữa.
-      blank_username_or_password: Bạn phải nhập email hoặc username, và mật khẩu
-      reset_password: Khởi tạo mật khẩu
-      logging_in: Đăng nhập...
-      or: Hoặc
-      authenticating: Đang xác thực...
-      awaiting_confirmation: Tài khoản của bạn đang đợi kích hoạt, sử dụng liên kết
-        quên mật khẩu trong trường hợp kích hoạt ở 1 email khác.
-      awaiting_approval: 'Tài khoản của bạn chưa được chấp nhận bới thành viên. Bạn
-        sẽ được gửi một email khi được chấp thuận '
-      requires_invite: Xin lỗi, bạn phải được mời để tham gia diễn đàn
-      not_activated: Bạn không thể đăng nhập. Chúng tôi đã gửi trước email kích hoạt
-        cho bạn tại <b>{{sentTo}}</b>. Vui lòng làm theo hướng dẫn trong email để
-        kích hoạt tài khoản của bạn.
-      not_allowed_from_ip_address: Bạn không thể đăng nhập từ địa chỉ IP này
-      admin_not_allowed_from_ip_address: Bạn không thể đăng nhập với quyền quản trị
-        từ địa chỉ IP đó.
-      resend_activation_email: Bấm đây để gửi lại email kích hoạt
-      sent_activation_email_again: 'Chúng tôi gửi email kích hoạt tới cho bạn ở <b>{{currentEmail}}</b>.
-        Nó sẽ mất vài phút để đến; bạn nhớ check cả hồm thư spam nhe. '
-      to_continue: Vui lòng đăng nhập
-      preferences: Bạn cần phải đăng nhập để thay đổi cài đặt tài khoản.
-      forgot: Tôi không thể nhớ lại chi tiết tài khoản của tôi.
+      title: "Đăng nhập"
+      username: "Thành viên"
+      password: "Mật khẩu"
+      email_placeholder: "Email hoặc tên đăng nhập "
+      caps_lock_warning: "Phím Caps Lock đang được bật"
+      error: "Không xác định được lỗi"
+      rate_limit: "Xin đợi trước khi đăng nhập lại lần nữa."
+      blank_username_or_password: "Bạn phải nhập email hoặc username, và mật khẩu"
+      reset_password: 'Khởi tạo mật khẩu'
+      logging_in: "Đăng nhập..."
+      or: "Hoặc"
+      authenticating: "Đang xác thực..."
+      awaiting_approval: "Tài khoản của bạn chưa được chấp nhận bới thành viên. Bạn sẽ được gửi một email khi được chấp thuận "
+      requires_invite: "Xin lỗi, bạn phải được mời để tham gia diễn đàn"
+      not_activated: "Bạn không thể đăng nhập. Chúng tôi đã gửi trước email kích hoạt cho bạn tại <b>{{sentTo}}</b>. Vui lòng làm theo hướng dẫn trong email để kích hoạt tài khoản của bạn."
+      not_allowed_from_ip_address: "Bạn không thể đăng nhập từ địa chỉ IP này"
+      admin_not_allowed_from_ip_address: "Bạn không thể đăng nhập với quyền quản trị từ địa chỉ IP đó."
+      resend_activation_email: "Bấm đây để gửi lại email kích hoạt"
+      sent_activation_email_again: "Chúng tôi gửi email kích hoạt tới cho bạn ở <b>{{currentEmail}}</b>. Nó sẽ mất vài phút để đến; bạn nhớ check cả hồm thư spam nhe. "
+      to_continue: "Vui lòng đăng nhập"
+      preferences: "Bạn cần phải đăng nhập để thay đổi cài đặt tài khoản."
+      forgot: "Tôi không thể nhớ lại chi tiết tài khoản của tôi."
       google:
         title: 'với Google '
         message: Chứng thực với Google (Bạn hãy chắc chắn là chặn popup không bật)
@@ -1148,39 +1128,8 @@ vi:
       modal_cancel: Hủy
       cant_send_pm: Xin lỗi, bạn không thể gởi tin nhắn đến %{username}.
       yourself_confirm:
-        title: Bạn có quên chưa thêm người nhận?
-        body: Right now this message is only being sent to yourself!
-      admin_options_title: Tùy chọn quản trị viên cho chủ đề này
-      auto_close:
-        label: 'Thời gian tự khóa chủ đề:'
-        error: Vui lòng nhập một giá trị hợp lệ.
-        based_on_last_post: Không đóng cho đến khi bài viết cuối cùng trong chủ đề
-          này trở thành bài cũ
-        all:
-          examples: 'Nhập giờ (định dạng 24h), thời gian chính xác ( vd: 17:30) hoặc
-            thời gian kèm ngày tháng (2013-11-22 14:00).'
-        limited:
-          units: "(# của giờ)"
-          examples: Nhập số giờ ( theo định dạng 24h)
-      toggle_unlisted: Toggle Unlisted
-      group_mentioned:
-        one: By mentioning {{group}}, you are about to notify <a href='{{group_link}}'>1
-          person</a> – are you sure?
-        other: By mentioning {{group}}, you are about to notify <a href='{{group_link}}'>{{count}}
-          people</a> – are you sure?
-      cannot_see_mention:
-        category: You mentioned {{username}} but they won't be notified because they
-          do not have access to this category. You will need to add them to a group
-          that has access to this category.
-        private: You mentioned {{username}} but they won't be notified because they
-          are unable to see this personal message. You will need to invite them to
-          this PM.
-      duplicate_link: It looks like your link to <b>{{domain}}</b> was already posted
-        in the topic by <b>@{{username}}</b> in <a href='{{post_url}}'>a reply {{ago}}</a>
-        – are you sure you want to post it again?
-      title_or_link_placeholder: Type title, or paste a link here
-      topic_featured_link_placeholder: Enter link shown with title.
-      italic_label: I
+        title: "Bạn có quên chưa thêm người nhận?"
+      admin_options_title: "Tùy chọn quản trị viên cho chủ đề này"
     notifications:
       title: thông báo của @name nhắc đến, trả lời bài của bạn và chủ đề, tin nhắn,
         vv
@@ -1360,13 +1309,7 @@ vi:
         notification_level: Thay đổi cấp độ thông báo
         choose_new_category: 'Chọn chuyên mục mới cho chủ đề này:'
         selected:
-          other: Bạn đã chọn <b>{{count}}</b> chủ đề
-          one: You have selected <b>1</b> topic.
-        change_tags: Đổi thẻ
-        append_tags: Append Tags
-        choose_new_tags: 'Choose new tags for these topics:'
-        choose_append_tags: 'Choose new tags to append for these topics:'
-        changed_tags: The tags of those topics were changed.
+          other: "Bạn đã chọn <b>{{count}}</b> chủ đề"
       none:
         unread: Bạn không có chủ đề nào chưa đọc.
         new: Bạn không có chủ đề mới nào.
@@ -1467,13 +1410,8 @@ vi:
       suggest_create_topic: Tại sao không tạo một chủ đề mới?
       jump_reply_up: nhảy đến những trả lời trước đó
       jump_reply_down: nhảy tới những trả lời sau đó
-      deleted: Chủ đề này đã bị xóa
-      auto_close_notice: Chủ đề này sẽ tự động đóng %{timeLeft}.
-      auto_close_notice_based_on_last_post: Chủ đề này sẽ đóng %{duration} sau trả
-        lời cuối cùng.
-      auto_close_title: Tự động-Đóng các Cài đặt
-      auto_close_save: Lưu
-      auto_close_remove: Đừng Tự Động-Đóng Chủ Đề Này
+      deleted: "Chủ đề này đã bị xóa"
+      auto_close_title: 'Tự động-Đóng các Cài đặt'
       timeline:
         back: Quay lại
         back_description: Go back to your last unread post
@@ -1492,28 +1430,19 @@ vi:
         jump_prompt_long: What post would you like to jump to?
       notifications:
         reasons:
-          '3_6': Bạn sẽ nhận được các thông báo bởi vì bạn đang xem chuyên mục nàyotification
-          '3_5': Bạn sẽ nhận được các thông báo bởi vì bạn đã bắt đầu xem chủ đề này
-            một cách tự động
-          '3_2': Bạn sẽ nhận được các thông báo bởi vì bạn đang xem chủ đề này
-          '3_1': Bạn sẽ được nhận thông báo bởi bạn đã tạo chủ để này.
-          '3': Bạn sẽ nhận được các thông báo bởi vì bạn đang xem chủ đề này
-          '2_8': Bạn sẽ nhận được thông báo bởi vì bạn đang theo dõi chuyên mục này.
-          '2_4': Bạn sẽ nhận được các thông báo bởi vì bạn đã đăng một trả lời vào
-            chủ đề này
-          '2_2': Bạn sẽ nhận được các thông báo bởi vì bạn đang theo dõi chủ đề này.
-          '2': Bạn sẽ nhận được các thông báo bởi vì bạn <a href="/users/{{username}}/preferences">
-            đọc chủ đề này </a>
-          '1_2': Bạn sẽ được thông báo nếu ai đó đề cập đến @tên bạn hoặc trả lời
-            bạn
-          '1': Bạn sẽ được thông báo nếu ai đó đề cập đến @tên bạn hoặc trả lời bạn
-          '0_7': Bạn đang bỏ qua tất cả các thông báo trong chuyên mục này
-          '0_2': Bạn đang bỏ qua tất cả các thông báo trong chủ đề này
-          '0': Bạn đang bỏ qua tất cả các thông báo trong chủ đề này
-          mailing_list_mode: You have mailing list mode enabled, so you will be notified
-            of replies to this topic via email.
-          '3_10': You will receive notifications because you are watching a tag on
-            this topic.
+          '3_6': 'Bạn sẽ nhận được các thông báo bởi vì bạn đang xem chuyên mục nàyotification'
+          '3_5': 'Bạn sẽ nhận được các thông báo bởi vì bạn đã bắt đầu xem chủ đề này một cách tự động'
+          '3_2': 'Bạn sẽ nhận được các thông báo bởi vì bạn đang xem chủ đề này'
+          '3_1': 'Bạn sẽ được nhận thông báo bởi bạn đã tạo chủ để này.'
+          '3': 'Bạn sẽ nhận được các thông báo bởi vì bạn đang xem chủ đề này'
+          '2_8': 'Bạn sẽ nhận được thông báo bởi vì bạn đang theo dõi chuyên mục này.'
+          '2_4': 'Bạn sẽ nhận được các thông báo bởi vì bạn đã đăng một trả lời vào chủ đề này'
+          '2_2': 'Bạn sẽ nhận được các thông báo bởi vì bạn đang theo dõi chủ đề này.'
+          '1_2': 'Bạn sẽ được thông báo nếu ai đó đề cập đến @tên bạn hoặc trả lời bạn'
+          '1': 'Bạn sẽ được thông báo nếu ai đó đề cập đến @tên bạn hoặc trả lời bạn'
+          '0_7': 'Bạn đang bỏ qua tất cả các thông báo trong chuyên mục này'
+          '0_2': 'Bạn đang bỏ qua tất cả các thông báo trong chủ đề này'
+          '0': 'Bạn đang bỏ qua tất cả các thông báo trong chủ đề này'
         watching_pm:
           title: Đang xem
           description: Bạn sẽ được thông báo về từng trả lời mới trong tin nhắn này,
@@ -1548,22 +1477,19 @@ vi:
             và chúng sẽ không hiển thị là mới nhất.
         title: change how often you get notified about this topic
       actions:
-        recover: Không-Xóa Chủ Đề Này
-        delete: Xóa-Chủ Đề Này
-        open: Mở Chủ Đề
-        close: Đóng Chủ Đề
-        multi_select: Chọn Bài Viết...
-        auto_close: Tự Động Đóng...
-        pin: Ghim Chủ Đề...
-        unpin: Bỏ-Ghim Chủ Đề...
-        unarchive: Chủ đề Không Lưu Trữ
-        archive: Chủ Đề Lưu Trữ
-        invisible: Make Unlisted
-        visible: Make Listed
-        reset_read: Đặt lại dữ liệu đọc
-        make_public: Công khai chủ đề này
-        timed_update: Set Topic Timer...
-        make_private: Make Private Message
+        recover: "Không-Xóa Chủ Đề Này"
+        delete: "Xóa-Chủ Đề Này"
+        open: "Mở Chủ Đề"
+        close: "Đóng Chủ Đề"
+        multi_select: "Chọn Bài Viết..."
+        pin: "Ghim Chủ Đề..."
+        unpin: "Bỏ-Ghim Chủ Đề..."
+        unarchive: "Chủ đề Không Lưu Trữ"
+        archive: "Chủ Đề Lưu Trữ"
+        invisible: "Make Unlisted"
+        visible: "Make Listed"
+        reset_read: "Đặt lại dữ liệu đọc"
+        make_public: "Công khai chủ đề này"
       feature:
         pin: Ghim Chủ Đề
         unpin: Bỏ-Ghim Chủ Đề
@@ -2003,46 +1929,41 @@ vi:
       slug_placeholder: "(Tùy chọn) các từ sử dụng trong url"
       creation_error: Có lỗi xảy ra khi tạo chuyên mục
       save_error: Có lỗi xảy ra khi lưu chuyên mục
-      name: Tên chuyên mục
-      description: Mô tả
-      topic: chủ đề chuyên mục
-      logo: Logo của chuyên mục
-      background_image: Ảnh nền của chuyên mục
-      badge_colors: Màu huy hiệu
-      background_color: Màu nền
-      foreground_color: Màu mặt trước
-      name_placeholder: Tối đa một hoặc hai từ
-      color_placeholder: Bất cứ màu nào
-      delete_confirm: Bạn có chắc sẽ xóa chuyên mục này chứ?
-      delete_error: Có lỗi xảy ra khi xóa chuyên mục này
-      list: Danh sách chuyên mục
-      no_description: Hãy thêm mô tả cho chuyên mục này
-      change_in_category_topic: Sửa mô tả
-      already_used: Màu này đã được dùng bởi chuyên mục khác
-      security: Bảo mật
-      special_warning: 'Cảnh báo: Đây là chuyên mục có sẵn nên bạn không thể chỉnh
-        sửa các thiết lập bảo mật. Nếu bạn muốn sử dụng chuyên mục này, hãy xóa nó
-        thay vì tái sử dụng.'
-      images: Hình ảnh
-      auto_close_label: 'Tự động khóa chủ đề sau:'
-      auto_close_units: giờ
-      email_in: 'Tùy chỉnh địa chỉ nhận thư điện tử '
-      email_in_allow_strangers: Nhận thư điện tử từ người gửi vô danh không tài khoản
-      email_in_disabled: 'Tạo chủ đề mới thông qua email đã được tắt trong thiết lập.
-        Để bật tính năng này, '
-      email_in_disabled_click: kích hoạt thiết lập thư điện tử
-      suppress_from_homepage: Ngăn chặn chuyên mục này hiển thị trên trang chủ.
-      sort_order: 'Sắp xếp mặc định:'
-      allow_badges_label: Cho phép thưởng huy hiệu trong chuyên mục này
-      edit_permissions: Sửa quyền
-      add_permission: Thêm quyền
-      this_year: năm nay
-      position: vị trí
-      default_position: vị trí mặc định
-      position_disabled: 'Chuyên mục sẽ được hiển thị theo thứ tự hoạt động. Để kiểm
-        soát thứ tự chuyên mục trong danh sách, '
-      position_disabled_click: bật thiết lập "cố định vị trí chuyên mục".
-      parent: Danh mục cha
+      name: "Tên chuyên mục"
+      description: "Mô tả"
+      topic: "chủ đề chuyên mục"
+      logo: "Logo của chuyên mục"
+      background_image: "Ảnh nền của chuyên mục"
+      badge_colors: "Màu huy hiệu"
+      background_color: "Màu nền"
+      foreground_color: "Màu mặt trước"
+      name_placeholder: "Tối đa một hoặc hai từ"
+      color_placeholder: "Bất cứ màu nào"
+      delete_confirm: "Bạn có chắc sẽ xóa chuyên mục này chứ?"
+      delete_error: "Có lỗi xảy ra khi xóa chuyên mục này"
+      list: "Danh sách chuyên mục"
+      no_description: "Hãy thêm mô tả cho chuyên mục này"
+      change_in_category_topic: "Sửa mô tả"
+      already_used: 'Màu này đã được dùng bởi chuyên mục khác'
+      security: "Bảo mật"
+      special_warning: "Cảnh báo: Đây là chuyên mục có sẵn nên bạn không thể chỉnh sửa các thiết lập bảo mật. Nếu bạn muốn sử dụng chuyên mục này, hãy xóa nó thay vì tái sử dụng."
+      images: "Hình ảnh"
+      auto_close_label: "Tự động khóa chủ đề sau:"
+      auto_close_units: "giờ"
+      email_in: "Tùy chỉnh địa chỉ nhận thư điện tử "
+      email_in_allow_strangers: "Nhận thư điện tử từ người gửi vô danh không tài khoản"
+      email_in_disabled: "Tạo chủ đề mới thông qua email đã được tắt trong thiết lập. Để bật tính năng này, "
+      email_in_disabled_click: 'kích hoạt thiết lập thư điện tử'
+      suppress_from_homepage: "Ngăn chặn chuyên mục này hiển thị trên trang chủ."
+      allow_badges_label: "Cho phép thưởng huy hiệu trong chuyên mục này"
+      edit_permissions: "Sửa quyền"
+      add_permission: "Thêm quyền"
+      this_year: "năm nay"
+      position: "vị trí"
+      default_position: "vị trí mặc định"
+      position_disabled: "Chuyên mục sẽ được hiển thị theo thứ tự hoạt động. Để kiểm soát thứ tự chuyên mục trong danh sách, "
+      position_disabled_click: 'bật thiết lập "cố định vị trí chuyên mục".'
+      parent: "Danh mục cha"
       notifications:
         watching:
           title: Theo dõi
@@ -2205,9 +2126,8 @@ vi:
     history: Lịch sử
     changed_by: bởi {{author}}
     raw_email:
-      title: Email gốc
-      not_available: Không sẵn sàng!
-    categories_list: Danh sách Danh mục
+      not_available: "Không sẵn sàng!"
+    categories_list: "Danh sách Danh mục"
     filters:
       with_topics: "%{filter} chủ đề"
       with_category: "%{filter} %{category} chủ đề"
@@ -2708,9 +2628,7 @@ vi:
             confirm: Bạn muốn bắt đầu một bản sao lưu mới?
             without_uploads: Đúng (không bao gồm những tập tin)
           download:
-            label: Tải xuống
-            title: Tải xuống bản sao lưu này
-            alert: A link to download this backup has been emailed to you.
+            label: "Tải xuống"
           destroy:
             title: Xóa bản sao lưu này
             confirm: Bạn muốn hủy bản sao lưu này?
@@ -3059,35 +2977,31 @@ vi:
         unsuspend_failed: Có gì đó sai khi gỡ bỏ đình chỉ tài khoản này {{error}}
         suspend_duration: Tài khoản này sẽ bị đình chỉ bao lâu?
         suspend_duration_units: "(ngày)"
-        suspend_reason_label: Tại sao bạn bị đình chỉ? Dòng chữ <b>hiển thị cho tất
-          cả mọi người</b> sẽ hiển thị trên trang hồ sơ tài khoản của người dùng này,
-          và sẽ hiển thị cho thành viên khi họ đăng nhập, hãy viết ngắn.
-        suspend_reason: Lý do
-        suspended_by: Tạm khóa bởi
-        delete_all_posts: Xóa tất cả bài viết
-        suspend: Tạm khóa
-        unsuspend: Đã mở khóa
-        suspended: Đã tạm khóa?
-        moderator: Mod?
-        admin: Quản trị?
-        blocked: Đã khóa?
-        staged: Cấp bậc?
-        show_admin_profile: Quản trị
-        edit_title: Sửa Tiêu đề
-        save_title: Lưu Tiêu đề
-        refresh_browsers: Bắt buộc làm mới trình duyệt
-        refresh_browsers_message: Tin nhắn đã gửi cho tất cả người dùng!
-        show_public_profile: Hiển thị hồ sơ công khai
-        impersonate: Mạo danh
-        ip_lookup: Tìm kiếm địa chỉ IP
-        log_out: Đăng xuất
-        logged_out: Thành viên đã đăng xuất trên tất cả thiết bị
-        revoke_admin: Thu hồi quản trị
-        grant_admin: Cấp quản trị
-        revoke_moderation: Thu hồi điều hành
-        grant_moderation: Cấp điều hành
-        unblock: Mở khóa
-        block: Khóa
+        suspend_reason_label: "Tại sao bạn bị đình chỉ? Dòng chữ <b>hiển thị cho tất cả mọi người</b> sẽ hiển thị trên trang hồ sơ tài khoản của người dùng này, và sẽ hiển thị cho thành viên khi họ đăng nhập, hãy viết ngắn."
+        suspend_reason: "Lý do"
+        suspended_by: "Tạm khóa bởi"
+        delete_all_posts: "Xóa tất cả bài viết"
+        suspend: "Tạm khóa"
+        unsuspend: "Đã mở khóa"
+        suspended: "Đã tạm khóa?"
+        moderator: "Mod?"
+        admin: "Quản trị?"
+        blocked: "Đã khóa?"
+        staged: "Cấp bậc?"
+        show_admin_profile: "Quản trị"
+        refresh_browsers: "Bắt buộc làm mới trình duyệt"
+        refresh_browsers_message: "Tin nhắn đã gửi cho tất cả người dùng!"
+        show_public_profile: "Hiển thị hồ sơ công khai"
+        impersonate: 'Mạo danh'
+        ip_lookup: "Tìm kiếm địa chỉ IP"
+        log_out: "Đăng xuất"
+        logged_out: "Thành viên đã đăng xuất trên tất cả thiết bị"
+        revoke_admin: 'Thu hồi quản trị'
+        grant_admin: 'Cấp quản trị'
+        revoke_moderation: 'Thu hồi điều hành'
+        grant_moderation: 'Cấp điều hành'
+        unblock: 'Mở khóa'
+        block: 'Khóa'
         reputation: Danh tiếng
         permissions: Quyền
         activity: Hoạt động

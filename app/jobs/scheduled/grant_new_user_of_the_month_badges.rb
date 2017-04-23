@@ -8,6 +8,13 @@ module Jobs
 
     def execute(args)
       badge = Badge.find(Badge::NewUserOfTheMonth)
+
+      # Don't award it if a month hasn't gone by
+      return if UserBadge.where("badge_id = ? AND granted_at >= ?",
+        badge.id,
+        (1.month.ago + 1.day)  # give it a day slack just in case
+      ).exists?
+
       scores.each do |user_id, score|
         # Don't bother awarding to users who haven't received any likes
         if score > 0.0
@@ -33,6 +40,7 @@ module Jobs
           SUM(CASE
                WHEN pa.id IS NOT NULL THEN
                  CASE
+                   WHEN liked_by.admin OR liked_by.moderator THEN 2.0
                    WHEN liked_by.trust_level = 0 THEN 0.1
                    WHEN liked_by.trust_level = 1 THEN 0.25
                    WHEN liked_by.trust_level = 2 THEN 1.0
@@ -54,7 +62,9 @@ module Jobs
           NOT(u.moderator) AND
           u.created_at >= CURRENT_TIMESTAMP - '1 month'::INTERVAL
         GROUP BY u.id
-        HAVING COUNT(DISTINCT p.id) > 1 AND COUNT(DISTINCT p.topic_id) > 1
+        HAVING COUNT(DISTINCT p.id) > 1
+          AND COUNT(DISTINCT p.topic_id) > 1
+          AND COUNT(pa.id) > 1
         ORDER BY score DESC
         LIMIT :max_awarded
       SQL

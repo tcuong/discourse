@@ -1,20 +1,22 @@
 import { bufferedRender } from 'discourse-common/lib/buffered-render';
+import Category from 'discourse/models/category';
 
 export default Ember.Component.extend(bufferedRender({
-  elementId: 'topic-status-info',
+  classNames: ['topic-status-info'],
   delayedRerender: null,
 
   rerenderTriggers: [
-    'topic.topic_status_update',
-    'topic.topic_status_update.execute_at',
-    'topic.topic_status_update.based_on_last_post',
-    'topic.topic_status_update.duration'
+    'statusType',
+    'executeAt',
+    'basedOnLastPost',
+    'duration',
+    'categoryId',
   ],
 
   buildBuffer(buffer) {
-    if (!this.get('topic.topic_status_update')) return;
+    if (!this.get('executeAt')) return;
 
-    let statusUpdateAt = moment(this.get('topic.topic_status_update.execute_at'));
+    let statusUpdateAt = moment(this.get('executeAt'));
     if (statusUpdateAt < new Date()) return;
 
     let duration = moment.duration(statusUpdateAt - moment());
@@ -31,15 +33,27 @@ export default Ember.Component.extend(bufferedRender({
       rerenderDelay = 60000;
     }
 
-    let autoCloseHours = this.get("topic.topic_status_update.duration") || 0;
+    let autoCloseHours = this.get("duration") || 0;
 
     buffer.push('<h3><i class="fa fa-clock-o"></i> ');
 
-    buffer.push(I18n.t(this._noticeKey(), {
+    let options = {
       timeLeft: duration.humanize(true),
-      duration: moment.duration(autoCloseHours, "hours").humanize()
-    }));
+      duration: moment.duration(autoCloseHours, "hours").humanize(),
+    };
 
+    const categoryId = this.get('categoryId');
+
+    if (categoryId) {
+      const category = Category.findById(categoryId);
+
+      options = _.assign({
+        categoryName: category.get('slug'),
+        categoryUrl: category.get('url')
+      }, options);
+    }
+
+    buffer.push(I18n.t(this._noticeKey(), options));
     buffer.push('</h3>');
 
     // TODO Sam: concerned this can cause a heavy rerender loop
@@ -53,9 +67,9 @@ export default Ember.Component.extend(bufferedRender({
   },
 
   _noticeKey() {
-    const statusType = this.get('topic.topic_status_update.status_type');
+    const statusType = this.get('statusType');
 
-    if (this.get("topic.topic_status_update.based_on_last_post")) {
+    if (this.get("basedOnLastPost")) {
       return `topic.status_update_notice.auto_${statusType}_based_on_last_post`;
     } else {
       return `topic.status_update_notice.auto_${statusType}`;
