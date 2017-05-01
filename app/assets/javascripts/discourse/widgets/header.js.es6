@@ -172,7 +172,7 @@ export function attachAdditionalPanel(name, toggle, transformAttrs) {
 }
 
 export default createWidget('header', {
-  tagName: 'header.d-header.clearfix',
+  tagName: 'header.d-header.clearfix.bala',
   buildKey: () => `header`,
 
   defaultState() {
