@@ -225,11 +225,20 @@ export default createWidget('header', {
       }
     });
 
-    const contents = [ this.attach('home-logo', { minimized: !!attrs.topic }),
-                       h('div.panel.clearfix', panels) ];
 
+    var contents;
+    const text = "Trang chủ";
+    const link = "http://www.999sach.com";
+
+    const small_device_linh_to_home = h('span.link_to_home.small_device', h('a', {text: text, href: link}));
     if (attrs.topic) {
+      contents =  [ this.attach('home-logo', { minimized: !!attrs.topic }), small_device_linh_to_home,
+        h('div.panel.clearfix', panels) ];
       contents.push(this.attach('header-topic-info', attrs));
+    } else {
+      const linh_to_home = h('span.link_to_home.normal_device', h('a', {text: text, href: link}));
+      contents = [ this.attach('home-logo', { minimized: !!attrs.topic }), linh_to_home, small_device_linh_to_home,
+                       h('div.panel.clearfix', panels) ];
     }
 
     return h('div.wrap', h('div.contents.clearfix', contents));
